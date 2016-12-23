@@ -8,7 +8,7 @@ alias sqlogs='tail -f log/sidekiq.log'
 alias grco="git recentco"
 alias kungfu='echo $FUUBAR_GEM >> Gemfile; bundle'
 alias clearfu="git checkout Gemfile"
-alias aliaz="vim ~/etc/bash_aliases.sh"
+alias aliaz="vim ~/.dotfiles/bash_aliases.sh"
 alias com="git commit -m"
 alias gs="git status"
 alias lg="git lg"
@@ -36,4 +36,4 @@ alias tmuxconf="vim ~/.tmux.conf"
 alias tat="tmux a -t"
 
 alias vim="nvim"
-alias vimconf="vim ~/etc/vimconfig.vim"
+alias vimconf="vim ~/.dotfiles/vimconfig.vim"
