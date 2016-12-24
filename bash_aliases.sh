@@ -15,6 +15,7 @@ alias lg="git lg"
 alias rs="be rspec"
 alias r="rails"
 alias l='ls -a'
+alias lg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias brefresh='source ~/.bash_profile'
 alias rubocopcfg='atom /Users/timsandberg/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/rubocop-0.34.0/config/default.yml'
 alias psandbox='heroku run console --sandbox -r CAUTION_pr0duct10n_oMfG'
