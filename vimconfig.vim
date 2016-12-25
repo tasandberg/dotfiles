@@ -128,7 +128,4 @@ set expandtab
 set shiftwidth=2
 set hlsearch
 
-" centralize backup and swap files
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swp//
 set fileformat=unix
