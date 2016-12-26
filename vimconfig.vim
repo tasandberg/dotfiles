@@ -20,6 +20,8 @@ Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
+" --- fzf alias (under plugin config section) requires brew install
+"  the_silver_searcher
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
