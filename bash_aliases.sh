@@ -1,3 +1,5 @@
+# General Aliases
+alias cddf="cd ~/.dotfiles"
 alias be="bundle exec"
 alias gco="git checkout"
 alias grco="git recentco"
