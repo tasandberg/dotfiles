@@ -1,15 +1,11 @@
-# A chaotic collection of dotfiles
+# dotfiles
 
 ### Installation
 
 ```
-git clone git@github.com:Timmehs/chaosfiles.git ~/etc
-
-# Experimental!
-
-chmod 775 ~/etc/setup
-./etc/setup
+git clone git@github.com:Timmehs/dotfiles.git ~/.dotfiles
 ```
 
 - `aliaz` will open the bash aliases file in vim
-- `brefresh` will refresh bash config
+- `aliazl` will open your local .bash_profile (put machine-specific aliases here)
+- `brefresh` will refresh bash config by calling `source ~/.bash_profile`
