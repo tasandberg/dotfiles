@@ -1,6 +1,7 @@
 # General Aliases
 alias cddf="cd ~/.dotfiles"
 alias be="bundle exec"
+alias ber="bundle exect rails"
 alias gco="git checkout"
 alias grco="git recentco"
 alias aliaz="vim ~/.dotfiles/bash_aliases.sh"
