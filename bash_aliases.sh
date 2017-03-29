@@ -16,7 +16,8 @@ alias lg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %
 alias brefresh='source ~/.bash_profile'
 
 # Tmux Aliases
-alias tmuxconf="vim ~/.tmux.conf"
+# Remember to add "source-file ~/.dotfiles/.tmux.conf" to ~/.tmux.conf
+alias tmuxconf="vim ~/.dotfiles/tmux.conf"
 alias ta="tmux a -t"
 
 # Vim Aliases
