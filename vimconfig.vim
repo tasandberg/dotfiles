@@ -39,9 +39,8 @@ filetype plugin indent on
 syntax on
 
 set mouse=a
-
 " ---- Colors
-colorscheme Monokai 
+colorscheme monokai
 
 " ---- fzf settings
 nmap <C-p> :FZF<CR>
@@ -131,3 +130,4 @@ set shiftwidth=2
 set hlsearch
 
 set fileformat=unix
+
