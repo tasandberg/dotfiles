@@ -8,7 +8,7 @@ call plug#begin('~/.vim/plugged')
 " color schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'crusoexia/vim-dracula'
-
+Plug 'skielbasa/vim-material-monokai' 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
@@ -31,6 +31,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'ervandew/supertab'
+Plug 'ngmy/vim-rubocop'
 
 call plug#end()
 
@@ -40,7 +41,17 @@ syntax on
 
 set mouse=a
 " ---- Colors
-colorscheme monokai
+set background=dark
+set termguicolors
+colorscheme material-monokai
+
+" General Keymappings
+
+" Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
+nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent> ∆ :set paste<CR>m`o<Esc>``:set nopaste<CR>
+nnoremap <silent> ˚ :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
 " ---- fzf settings
 nmap <C-p> :FZF<CR>
@@ -52,7 +63,7 @@ let g:airline_powerline_fonts=1
 let g:airline_detect_paste=1
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers = 0
-let g:airline_theme='powerlineish'
+let g:airline_theme='materialmonokai'
 " --- Nerdtree-tabs
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
