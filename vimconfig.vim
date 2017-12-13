@@ -1,8 +1,8 @@
 set nocompatible
 filetype off
-
+set linespace=0
 " --- Vim-Plug Plugin Manager
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 " --- Making Vim Look Good ----------------------------
 " color schemes
@@ -20,10 +20,12 @@ Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
+
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 Plug 'sheerun/vim-polyglot'
 Plug 'Raimondi/delimitMate'
 Plug 'airblade/vim-gitgutter'
@@ -62,8 +64,9 @@ set laststatus=2
 let g:airline_powerline_fonts=1
 let g:airline_detect_paste=1
 let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_buffers = 1
 let g:airline_theme='materialmonokai'
+
 " --- Nerdtree-tabs
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
