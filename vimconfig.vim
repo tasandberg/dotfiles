@@ -14,9 +14,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'scrooloose/syntastic'
-Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
@@ -53,9 +53,20 @@ nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent> ∆ :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent> ˚ :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
+" Git Mappings
+nnoremap <silent><space>gs :Gstatus<CR>
+nnoremap <space>gt :Gcommit -v -q %:p<CR>
+nnoremap <silent><C-b> :Gblame<CR>
+
+" NERDTree
+nnoremap <silent><space>t :NERDTreeFind<CR>
+
 " ---- fzf settings
 nmap <C-p> :FZF<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10split enew' }
 
 " --- Vim-Airline
 set laststatus=2
