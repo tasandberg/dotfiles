@@ -8,7 +8,8 @@ call plug#begin('~/.vim/plugged')
 " color schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'crusoexia/vim-dracula'
-Plug 'skielbasa/vim-material-monokai' 
+Plug 'skielbasa/vim-material-monokai'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
@@ -16,10 +17,12 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
+Plug 'dkprice/vim-easygrep' " Better searching
 Plug 'scrooloose/syntastic'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
+Plug 'ryanoasis/vim-devicons'
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -44,6 +47,7 @@ set mouse=a
 set background=dark
 set termguicolors
 colorscheme material-monokai
+set guifont=Inconsolata_Nerd_Font_Complete_Mono:16
 
 " General Keymappings
 
@@ -64,9 +68,6 @@ nnoremap <silent><space>t :NERDTreeFind<CR>
 " ---- fzf settings
 nmap <C-p> :FZF<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-let g:fzf_layout = { 'window': 'enew' }
-let g:fzf_layout = { 'window': '-tabnew' }
-let g:fzf_layout = { 'window': '10split enew' }
 
 " --- Vim-Airline
 set laststatus=2
@@ -75,10 +76,15 @@ let g:airline_detect_paste=1
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline_theme='materialmonokai'
+
 " --- Nerdtree-tabs
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
 let NERDTreeShowHidden=1
+" --- Nerdtree Syntax Highlight
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
 
 " --- scrooloose/syntastic settings
 set statusline+=%#warningmsg#
