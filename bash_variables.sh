@@ -8,5 +8,4 @@ PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
 export PATH
 PATH="$PATH:$HOME/.dotfiles/bin"
 eval "$(rbenv init -)"
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

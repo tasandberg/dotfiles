@@ -9,7 +9,7 @@ alias aliazl="vim ~/.bash_profile"
 alias com="git commit -m"
 alias gs="git status"
 alias lg="git lg"
-alias rs="be rspec"
+alias rs="be rspec --format documentation"
 alias r="rails"
 alias l='ls -a'
 alias lg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -23,3 +23,11 @@ alias ta="tmux a -t"
 # Vim Aliases
 alias vim="nvim"
 alias vimconf="vim ~/.dotfiles/vimconfig.vim"
+
+# Docker Aliases
+alias dc="docker container"
+alias dcs="docker containers"
+alias dis="docker images"
+alias di="docker image"
+alias dcom="docker-compose"
+
