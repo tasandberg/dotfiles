@@ -1,23 +1,14 @@
 #!/bin/bash
 # A collection of setup ecripts
 
-# Install Homebrew
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-# Rbenv
-brew install rbenv && rbenv init
-
 # Tmux
 # brew install tmux
-touch ~/.tmux.conf
-echo "source-file ~/.dotfiles/tmux.conf" >> ~/.tmux.conf
-
 # Add bash profile to home directory, reference dotfile bashrc
 touch ~/.bash_profile
 echo "source ~/.dotfiles/bashrc" >> ~/.bash_profile
 
 # Install NeoVim
-brew install neovim/neovim/neovim
+sudo apt-get update && sudo apt-get neovim
 
 # Install Vim-Plug for NeoVim
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
