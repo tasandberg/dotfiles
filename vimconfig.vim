@@ -8,19 +8,22 @@ call plug#begin('~/.local/share/nvim/plugged')
 " color schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'crusoexia/vim-dracula'
-Plug 'skielbasa/vim-material-monokai' 
+Plug 'skielbasa/vim-material-monokai'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
+Plug 'dkprice/vim-easygrep' " Better searching
 Plug 'scrooloose/syntastic'
-Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
 Plug 'vitalk/vim-shebang' " -- read shebang to set filetype for highlighting scripts
+Plug 'ryanoasis/vim-devicons'
 
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
@@ -47,6 +50,7 @@ set mouse=a
 set background=dark
 set termguicolors
 colorscheme material-monokai
+set guifont=Inconsolata_Nerd_Font_Complete_Mono:16
 
 " General Keymappings
 
@@ -55,6 +59,14 @@ nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent> ∆ :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent> ˚ :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
+" Git Mappings
+nnoremap <silent><space>gs :Gstatus<CR>
+nnoremap <space>gt :Gcommit -v -q %:p<CR>
+nnoremap <silent><C-b> :Gblame<CR>
+
+" NERDTree
+nnoremap <silent><space>t :NERDTreeFind<CR>
 
 " ---- fzf settings
 nmap <C-p> :FZF<CR>
@@ -72,6 +84,10 @@ let g:airline_theme='materialmonokai'
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
 let NERDTreeShowHidden=1
+" --- Nerdtree Syntax Highlight
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
 
 " --- scrooloose/syntastic settings
 set statusline+=%#warningmsg#
