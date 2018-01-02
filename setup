@@ -2,27 +2,23 @@
 # A collection of setup ecripts
 
 # Tmux
-# brew install tmux
 # Add bash profile to home directory, reference dotfile bashrc
 touch ~/.bash_profile
 echo "source ~/.dotfiles/bashrc" >> ~/.bash_profile
 
+sudo apt-get update
+
 # Install NeoVim
-sudo apt-get update && sudo apt-get neovim
+sudo apt-get install neovim -y
+sudo apt-get install silversearcher-ag
+# Tmux
+sudo apt-get install tmux -y
 
 # Install Vim-Plug for NeoVim
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Copy over vim config to
-mkdir ~/.config/ && mkdir ~/.config/nvim && touch ~/.config/nvim/init.vim
+mkdir -p  ~/.config/nvim && touch ~/.config/nvim/init.vim
 echo "source ~/.dotfiles/vimconfig.vim" >> ~/.config/nvim/init.vim
 
-# Install Powerline Fonts
-git clone https://github.com/powerline/fonts.git
-# install
-cd fonts
-./install.sh
-# clean-up a bit
-cd ..
-rm -rf fonts
