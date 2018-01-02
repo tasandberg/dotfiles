@@ -20,6 +20,7 @@ Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
+Plug 'vitalk/vim-shebang' " -- read shebang to set filetype for highlighting scripts
 
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
