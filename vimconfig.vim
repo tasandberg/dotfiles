@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 set linespace=0
 " --- Vim-Plug Plugin Manager
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin()
 
 " --- Making Vim Look Good ----------------------------
 " color schemes

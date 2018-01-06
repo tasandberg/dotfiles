@@ -13,7 +13,7 @@ alias rs="be rspec --format documentation"
 alias r="rails"
 alias l='ls -a'
 alias lg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias brefresh='source ~/.bash_profile'
+alias brefresh='source ~/.bashrc'
 
 # Tmux Aliases
 # Remember to add "source-file ~/.dotfiles/.tmux.conf" to ~/.tmux.conf
@@ -21,7 +21,7 @@ alias tmuxconf="vim ~/.dotfiles/tmux.conf"
 alias ta="tmux a -t"
 
 # Vim Aliases
-alias vim="nvim"
+alias vim="vim"
 alias vimconf="vim ~/.dotfiles/vimconfig.vim"
 
 # Docker Aliases
