@@ -21,7 +21,6 @@ alias tmuxconf="vim ~/.dotfiles/tmux.conf"
 alias ta="tmux a -t"
 
 # Vim Aliases
-alias vim="vim"
 alias vimconf="vim ~/.dotfiles/vimconfig.vim"
 
 # Docker Aliases
