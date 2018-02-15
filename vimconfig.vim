@@ -4,6 +4,10 @@ set linespace=0
 " --- Vim-Plug Plugin Manager
 call plug#begin('~/.local/share/nvim/plugged')
 
+
+" --- Making NeoVim Fast ---
+Plug 'neomake/neomake'
+
 " --- Making Vim Look Good ----------------------------
 " color schemes
 Plug 'flazz/vim-colorschemes'
@@ -24,6 +28,11 @@ Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
 Plug 'vitalk/vim-shebang' " -- read shebang to set filetype for highlighting scripts
 Plug 'ryanoasis/vim-devicons'
+" -- Snippets
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
 
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
@@ -40,6 +49,14 @@ Plug 'ervandew/supertab'
 Plug 'ngmy/vim-rubocop'
 
 call plug#end()
+
+"-- NeoMake ---
+" When writing a buffer.
+call neomake#configure#automake('w')
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
 
 filetype plugin indent on
 

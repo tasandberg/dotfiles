@@ -20,6 +20,9 @@ alias brefresh='source ~/.bash_profile'
 alias tmuxconf="vim ~/.dotfiles/tmux.conf"
 alias ta="tmux a -t"
 
+# Tmuxinator
+alias tater="tmuxinator"
+
 # Vim Aliases
 alias vim="nvim"
 alias vimconf="vim ~/.dotfiles/vimconfig.vim"
