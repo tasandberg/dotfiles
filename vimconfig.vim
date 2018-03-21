@@ -17,10 +17,9 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
+
 Plug 'dkprice/vim-easygrep' " Better searching
 Plug 'scrooloose/syntastic'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
 Plug 'ryanoasis/vim-devicons'
 
@@ -37,6 +36,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'ervandew/supertab'
 Plug 'ngmy/vim-rubocop'
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
@@ -51,10 +51,13 @@ set termguicolors
 colorscheme material-monokai
 set guifont=Inconsolata_Nerd_Font_Complete_Mono:16
 
-" General Keymappings
+" General Key Bindings
+
+" Copy to clipboard
+nnoremap <silent><leader>C :w !pbcopy<CR>
+nnoremap <silent><leader>P :r !pbpaste<CR>
 
 " Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
-nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent> ∆ :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent> ˚ :set paste<CR>m`O<Esc>``:set nopaste<CR>
@@ -83,6 +86,7 @@ let g:airline_theme='materialmonokai'
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
 let NERDTreeShowHidden=1
+
 " --- Nerdtree Syntax Highlight
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
@@ -99,16 +103,19 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_ruby_checkers = ['rubocop', 'mri', 'jruby']
+
 
 let g:syntastic_error_symbol = '❌'
 let g:syntastic_style_error_symbol = '⁉️'
 let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
+let g:syntastic_style_warning_symbol = '⦿'
 
 highlight link SyntasticErrorSign SignColumn
+highlight SyntasticErrorSign guifg=white guibg=red
 highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
+highlight SyntasticStyleWarningSign guifg=red
 
 augroup mySyntastic
   au!
@@ -145,6 +152,9 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 " --- vim javascript
 let g:javascript_plugin_jsdoc = 1
 
+" --- nvim settings
+let g:loaded_python_provider=1
+
 " --- General Settings ---
 set t_Co=256
 set backspace=indent,eol,start
@@ -158,6 +168,6 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 set hlsearch
-
+set colorcolumn=120
 set fileformat=unix
-
+set signcolumn=yes

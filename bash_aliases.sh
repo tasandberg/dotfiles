@@ -18,7 +18,7 @@ alias brefresh='source ~/.bash_profile'
 # Tmux Aliases
 # Remember to add "source-file ~/.dotfiles/.tmux.conf" to ~/.tmux.conf
 alias tmuxconf="vim ~/.dotfiles/tmux.conf"
-alias ta="tmux a -t"
+alias tat="tmux a -t"
 
 # Vim Aliases
 alias vim="nvim"
@@ -26,8 +26,15 @@ alias vimconf="vim ~/.dotfiles/vimconfig.vim"
 
 # Docker Aliases
 alias dc="docker container"
-alias dcs="docker containers"
+alias dcs="docker container ls"
 alias dis="docker images"
 alias di="docker image"
 alias dcom="docker-compose"
+alias dcup="docker-compose up"
+alias dcdn="docker-compose down --remove-orphans"
+
+dsh()
+{
+  docker exec -it $1 /bin/bash
+}
 
