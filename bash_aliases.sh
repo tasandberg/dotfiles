@@ -4,6 +4,7 @@ alias be="bundle exec"
 alias ber="bundle exec rails"
 alias gco="git checkout"
 alias grco="git recentco"
+alias gpu='git push -u origin'
 alias aliaz="vim ~/.dotfiles/bash_aliases.sh"
 alias aliazl="vim ~/.bash_profile"
 alias com="git commit -m"
@@ -18,7 +19,7 @@ alias brefresh='source ~/.bash_profile'
 # Tmux Aliases
 # Remember to add "source-file ~/.dotfiles/.tmux.conf" to ~/.tmux.conf
 alias tmuxconf="vim ~/.dotfiles/tmux.conf"
-alias tat="tmux a -t"
+alias tat="tmux a -d -t"
 
 # Tmuxinator
 alias tater="tmuxinator"
