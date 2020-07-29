@@ -18,7 +18,7 @@ alias brefresh='source ~/.bashrc'
 # Tmux Aliases
 # Remember to add "source-file ~/.dotfiles/.tmux.conf" to ~/.tmux.conf
 alias tmuxconf="vim ~/.dotfiles/tmux.conf"
-alias ta="tmux a -t"
+alias tat="tmux a -t"
 
 # Vim Aliases
 alias vimconf="vim ~/.dotfiles/vimconfig.vim"
