@@ -70,7 +70,7 @@ nmap <C-p> :FZF<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
 " --- Nerdtree-tabs
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
+nmap <silent> <leader>t :NERDTreeToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
 let NERDTreeShowHidden=1
 " --- Nerdtree Syntax Highlight
