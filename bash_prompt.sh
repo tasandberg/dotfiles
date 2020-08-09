@@ -54,4 +54,4 @@ case $OSTYPE in
 esac
 
 GIT_PS1_SHOWDIRTYSTATE=true
-PS1="\n$USER_COLOR\u@\H: $BRIGHT_YELLOW\w$BRIGHT_CYAN\$(__git_ps1 ' [%s]')$CYAN\n>$RESET "
+PS1="\n$USER_COLOR\u@\H: $BRIGHT_YELLOW\w$BRIGHT_CYAN\$(__git_ps1 ' [%s]')\n$RESET\$ "
