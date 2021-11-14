@@ -30,8 +30,6 @@ Plug 'ryanoasis/vim-devicons'
 " -- Snippets
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
 
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
