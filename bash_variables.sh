@@ -9,9 +9,6 @@ PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
 export PATH
 PATH="$PATH:$HOME/.dotfiles/bin"
 
-# Initialize Brew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
 # Initialize rbenv
 eval "$(rbenv init -)"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
