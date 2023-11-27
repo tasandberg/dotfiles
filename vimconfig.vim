@@ -2,13 +2,20 @@ set nocompatible
 filetype off
 set linespace=0
 " --- Vim-Plug Plugin Manager
-call plug#begin()
+call plug#begin('~/.local/share/nvim/plugged')
 
+
+" --- Making NeoVim Fast ---
+Plug 'neomake/neomake'
 
 " --- Making Vim Look Good ----------------------------
 " color schemes
+Plug 'flazz/vim-colorschemes'
 Plug 'crusoexia/vim-dracula'
 Plug 'skielbasa/vim-material-monokai'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
@@ -23,8 +30,6 @@ Plug 'ryanoasis/vim-devicons'
 " -- Snippets
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
 
 " --- fzf alias (under plugin config section) requires brew install
 "  the_silver_searcher
@@ -38,9 +43,18 @@ Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'ervandew/supertab'
-Plug 'itchyny/lightline.vim'
+Plug 'ngmy/vim-rubocop'
+Plug 'tpope/vim-surround'
 
 call plug#end()
+
+"-- NeoMake ---
+" When writing a buffer.
+call neomake#configure#automake('w')
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
 
 filetype plugin indent on
 
@@ -50,17 +64,8 @@ set mouse=a
 " ---- Colors
 set background=dark
 set termguicolors
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
 colorscheme material-monokai
+set guifont=Inconsolata_Nerd_Font_Complete_Mono:16
 
 " General Key Bindings
 
@@ -85,8 +90,16 @@ nnoremap <silent><space>t :NERDTreeFind<CR>
 nmap <C-p> :FZF<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
+" --- Vim-Airline
+set laststatus=2
+let g:airline_powerline_fonts=1
+let g:airline_detect_paste=1
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline_theme='materialmonokai'
+
 " --- Nerdtree-tabs
-nmap <silent> <leader>t :NERDTreeToggle<CR>
+nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=0
 let NERDTreeShowHidden=1
 
@@ -96,9 +109,9 @@ let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
 
 " --- scrooloose/syntastic settings
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_loc_list_height = 5
@@ -141,6 +154,17 @@ let g:NERDTrimTrailingWhitespace = 1
 " --- indentLine ---
 let g:indentLine_color_term = 237
 
+" --- xolox/vim-easytags settings
+set tags=./tags;,~/.vimtags
+let g:easytags_events = ['BufReadPost', 'BufWritePost']
+let g:easytags_async = 1
+let g:easytags_dynamic_files = 2
+let g:easytags_resolve_links = 1
+let g:easytags_suppress_ctags_warning = 1
+" --- majutsushi/tagbar settings
+"  open/close tagbar with \b
+nmap <silent> <leader>b :TagbarToggle<CR>
+
 " --- vim javascript
 let g:javascript_plugin_jsdoc = 1
 
@@ -161,7 +185,5 @@ set expandtab
 set shiftwidth=2
 set hlsearch
 set colorcolumn=120
-set laststatus=2
-
 set fileformat=unix
 set signcolumn=yes
