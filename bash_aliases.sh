@@ -33,9 +33,9 @@ alias dc="docker container"
 alias dcs="docker container ls"
 alias dis="docker images"
 alias di="docker image"
-alias dcom="docker-compose"
-alias dcup="docker-compose up"
-alias dcdn="docker-compose down --remove-orphans"
+alias dcom="docker compose"
+alias dcup="docker compose up"
+alias dcdn="docker compose down --remove-orphans"
 
 dsh()
 {
