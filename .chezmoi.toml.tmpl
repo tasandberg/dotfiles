@@ -1,5 +1,10 @@
-{{- $name := promptStringOnce . "name" "Full name" -}}
-{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $name := "Tim Sandberg" -}}
+{{- $email := "tim.sandberg@monograph.com" -}}
+
+{{- if stdinIsATTY -}}
+{{-   $name = promptStringOnce . "name" "Full name" $name -}}
+{{-   $email = promptStringOnce . "email" "Email address" $email -}}
+{{- end -}}
 
 [data]
   name = {{ $name | quote }}
