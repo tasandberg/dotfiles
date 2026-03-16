@@ -1,0 +1,45 @@
+# Monograph development aliases and functions
+
+export MG_HOME="{{ if (env "DEVCONTAINER") }}/monorepo{{ else }}/Users/tim/dev/monograph{{ end }}"
+
+alias cdmg="cd $MG_HOME"
+alias cdmgapi="cd $MG_HOME/apps/api"
+alias cdmgweb="cd $MG_HOME/apps/web/packages/app"
+alias mgmigrate="bin/rails db:migrate:with_data"
+alias sd="script/docker"
+alias pcli="playwright-cli"
+
+gqlgen() {
+  pushd "$MG_HOME/apps/api"
+    bundle exec rake graphql:dump
+  popd
+
+  pushd "$MG_HOME/apps/web/packages/app"
+    pnpm codegen:schema
+    pnpm codegen:graphql
+  popd
+}
+
+{{ if not (env "DEVCONTAINER") -}}
+# Host-only: postgres connection to Docker container
+export PGHOST=localhost
+export PGPORT=5432
+export PGUSER=postgres
+export PGPASSWORD=postgres
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+export NGROK_DOMAIN=enabled-daily-imp.ngrok-free.app
+
+alias codemg="code ~/dev/monograph.code-workspace"
+
+closemg() {
+  echo "Stopping processes..."
+  tmux send-keys -t mg:rails.1 C-c
+  tmux send-keys -t mg:nextjs.1 C-c
+  tmux send-keys -t mg:sidekiq.1 C-c
+  tater stop mg
+}
+{{ end -}}
+
+# Claude Code
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+export PLAYWRIGHT_MCP_OUTPUT_DIR="/tmp/playwright-cli-output"
