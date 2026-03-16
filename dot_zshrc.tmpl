@@ -6,6 +6,12 @@ ZSH_THEME=""
 fpath+=($HOME/.zsh/pure)
 autoload -U promptinit; promptinit
 prompt pure
+{{ if (env "DEVCONTAINER") -}}
+# Disable git status in prompt — slow on bind-mounted volumes
+zstyle ':prompt:pure:git:stash' show no
+zstyle ':prompt:pure:git:fetch' only-hierarchies yes
+PURE_GIT_PULL=0
+{{ end -}}
 
 # Plugins
 plugins=(git)
