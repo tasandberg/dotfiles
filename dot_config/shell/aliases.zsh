@@ -4,6 +4,7 @@
 alias aliaz="dotfiles edit aliases"
 alias aliazl="dotfiles edit local"
 alias brefresh="chezmoi apply && source ~/.zshrc"
+alias cddf="cd $(chezmoi source-path)"
 
 # General
 alias p="pnpm"
