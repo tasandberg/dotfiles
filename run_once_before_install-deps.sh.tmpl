@@ -1,34 +1,200 @@
 #!/bin/bash
 set -euo pipefail
 
-# Install oh-my-zsh if not present
+# --- Helper functions ---
+
+_log() {
+  echo "==> $1"
+}
+
+_install_if_missing() {
+  local cmd="$1"
+  local name="${2:-$1}"
+  local install_fn="$3"
+
+  if command -v "$cmd" &>/dev/null; then
+    _log "$name already installed, skipping"
+  else
+    _log "Installing $name..."
+    eval "$install_fn"
+  fi
+}
+
+# --- Homebrew (macOS only) ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+if ! command -v brew &>/dev/null; then
+  _log "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  _log "Homebrew already installed, skipping"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ end -}}
+
+# --- APT update (Linux only, run once) ---
+
+{{ if eq .chezmoi.os "linux" -}}
+_apt_updated=false
+_ensure_apt_updated() {
+  if [ "$_apt_updated" = false ]; then
+    _log "Updating apt package index..."
+    sudo apt-get update -qq
+    _apt_updated=true
+  fi
+}
+{{ end -}}
+
+# --- neovim ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+_install_if_missing nvim neovim "brew install neovim"
+{{ else -}}
+_install_if_missing nvim neovim "_ensure_apt_updated && sudo apt-get install -y neovim"
+{{ end -}}
+
+# --- tmux ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+_install_if_missing tmux tmux "brew install tmux"
+{{ else -}}
+_install_if_missing tmux tmux "_ensure_apt_updated && sudo apt-get install -y tmux"
+{{ end -}}
+
+# --- jq ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+_install_if_missing jq jq "brew install jq"
+{{ else -}}
+_install_if_missing jq jq "_ensure_apt_updated && sudo apt-get install -y jq"
+{{ end -}}
+
+# --- direnv ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+_install_if_missing direnv direnv "brew install direnv"
+{{ else -}}
+_install_if_missing direnv direnv "_ensure_apt_updated && sudo apt-get install -y direnv"
+{{ end -}}
+
+# --- rbenv + ruby-build ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+_install_if_missing rbenv rbenv "brew install rbenv ruby-build"
+{{ else -}}
+if [ ! -d "$HOME/.rbenv" ]; then
+  _log "Installing rbenv via git clone..."
+  git clone https://github.com/rbenv/rbenv.git "$HOME/.rbenv"
+  git clone https://github.com/rbenv/ruby-build.git "$HOME/.rbenv/plugins/ruby-build"
+else
+  _log "rbenv already installed, skipping"
+fi
+{{ end -}}
+
+# --- pnpm ---
+
+_install_if_missing pnpm pnpm "SHELL=\$(which bash) curl -fsSL https://get.pnpm.io/install.sh | sh -"
+
+# --- goenv ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+if ! brew list goenv &>/dev/null; then
+  _log "Installing goenv via Homebrew..."
+  brew install goenv
+else
+  _log "goenv already installed, skipping"
+fi
+{{ else -}}
+if [ ! -d "$HOME/.goenv" ]; then
+  _log "Installing goenv via git clone..."
+  git clone https://github.com/go-nv/goenv.git "$HOME/.goenv"
+else
+  _log "goenv already installed, skipping"
+fi
+{{ end -}}
+
+# --- fzf ---
+
+{{ if eq .chezmoi.os "darwin" -}}
+if ! command -v fzf &>/dev/null; then
+  _log "Installing fzf via Homebrew..."
+  brew install fzf
+  "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc
+elif [ ! -f "$HOME/.fzf.zsh" ]; then
+  _log "fzf found but shell integration missing, configuring..."
+  "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc
+else
+  _log "fzf already installed, skipping"
+fi
+{{ else -}}
+if ! command -v fzf &>/dev/null; then
+  _log "Installing fzf via apt..."
+  _ensure_apt_updated && sudo apt-get install -y fzf
+else
+  _log "fzf already installed, skipping"
+fi
+{{ end -}}
+
+# --- oh-my-zsh ---
+
 if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]; then
-  echo "Installing oh-my-zsh..."
+  _log "Installing oh-my-zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+else
+  _log "oh-my-zsh already installed, skipping"
 fi
 
-# Install pure prompt if not present
+# --- pure prompt ---
+
 if [ ! -d "$HOME/.zsh/pure" ]; then
-  echo "Installing pure prompt..."
+  _log "Installing pure prompt..."
   mkdir -p "$HOME/.zsh"
   git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+else
+  _log "pure prompt already installed, skipping"
 fi
 
-# Install fzf if not present
-if [ ! -f "$HOME/.fzf.zsh" ]; then
-  if command -v fzf &>/dev/null; then
-    echo "fzf found, skipping install"
+# --- vim-plug (for neovim) ---
+
+VIM_PLUG_PATH="${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim"
+if [ ! -f "$VIM_PLUG_PATH" ]; then
+  _log "Installing vim-plug for neovim..."
+  curl -fLo "$VIM_PLUG_PATH" --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else
+  _log "vim-plug already installed, skipping"
+fi
+
+# --- bws (Bitwarden Secrets CLI) ---
+
+if ! command -v bws &>/dev/null; then
+  _log "Installing bws (Bitwarden Secrets CLI)..."
+
+  BWS_VERSION="2.0.0"
 {{ if eq .chezmoi.os "darwin" -}}
-  elif command -v brew &>/dev/null; then
-    echo "Installing fzf via brew..."
-    brew install fzf
-    "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc
+  BWS_ARCH="{{ if eq .chezmoi.arch "arm64" }}aarch64{{ else }}x86_64{{ end }}"
+  BWS_URL="https://github.com/bitwarden/sdk-sm/releases/download/bws-v${BWS_VERSION}/bws-${BWS_ARCH}-apple-darwin-${BWS_VERSION}.zip"
+  BWS_TMP="$(mktemp -d)"
+  curl -fsSL -o "${BWS_TMP}/bws.zip" "$BWS_URL"
+  unzip -o "${BWS_TMP}/bws.zip" -d "${BWS_TMP}"
+  mkdir -p "$HOME/.local/bin"
+  mv "${BWS_TMP}/bws" "$HOME/.local/bin/bws"
+  chmod +x "$HOME/.local/bin/bws"
+  rm -rf "$BWS_TMP"
 {{ else -}}
-  elif command -v apt-get &>/dev/null; then
-    echo "Installing fzf via apt..."
-    sudo apt-get update -qq && sudo apt-get install -y fzf
+  BWS_ARCH="{{ if eq .chezmoi.arch "arm64" }}aarch64{{ else }}x86_64{{ end }}"
+  BWS_URL="https://github.com/bitwarden/sdk-sm/releases/download/bws-v${BWS_VERSION}/bws-${BWS_ARCH}-unknown-linux-gnu-${BWS_VERSION}.zip"
+  BWS_TMP="$(mktemp -d)"
+  curl -fsSL -o "${BWS_TMP}/bws.zip" "$BWS_URL"
+  unzip -o "${BWS_TMP}/bws.zip" -d "${BWS_TMP}"
+  mkdir -p "$HOME/.local/bin"
+  mv "${BWS_TMP}/bws" "$HOME/.local/bin/bws"
+  chmod +x "$HOME/.local/bin/bws"
+  rm -rf "$BWS_TMP"
 {{ end -}}
-  fi
+else
+  _log "bws already installed, skipping"
 fi
 
-echo "Setup complete!"
+_log "Setup complete!"

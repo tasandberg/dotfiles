@@ -19,7 +19,14 @@ dotfiles secrets sync
 touch ~/.zshrc.local
 ```
 
-The `run_once_before` script automatically installs oh-my-zsh, [pure prompt](https://github.com/sindresorhus/pure), and fzf on first run.
+The `run_once_before` script automatically installs all dependencies on first run. It's idempotent and works on both macOS (Homebrew) and Linux (apt + git clone):
+
+- Homebrew (macOS only)
+- neovim, tmux, jq, direnv, fzf
+- rbenv + ruby-build, pnpm, goenv
+- oh-my-zsh, [pure prompt](https://github.com/sindresorhus/pure)
+- vim-plug (for neovim)
+- bws (Bitwarden Secrets CLI)
 
 ## Shell load order
 
@@ -60,7 +67,7 @@ Shortcuts: `aliaz` (edit aliases), `aliazl` (edit local), `brefresh` (apply).
 - **Neovim** -- vim-plug, material-monokai, NERDTree, fzf, syntastic, airline, fugitive
 - **tmux** -- `C-a` prefix, vi copy mode, mouse support, `|`/`-` splits
 - **Git** -- aliases (`gs`, `gco`, `gpu`, `com`, `lg`), `git recentco` for branch switching
-- **Tool inits** -- Homebrew, nvm, rbenv, pnpm (macOS only, skipped in devcontainers)
+- **Tool inits** -- Homebrew, rbenv, pnpm (macOS only, skipped in devcontainers)
 - **Docker/Rails aliases** -- `dc`, `dcup`, `dcdn`, `dsh`, `be`, `ber`, `rs`
 
 ## Local files (not tracked)
@@ -78,6 +85,6 @@ Secrets are managed via [Bitwarden Secrets Manager](https://bitwarden.com/produc
 
 Chezmoi templates (`.tmpl` files) handle:
 
-- **OS detection** -- Homebrew/nvm/rbenv/pnpm only on macOS
+- **OS detection** -- Homebrew/rbenv/pnpm only on macOS
 - **Devcontainer detection** -- disables git fetch in pure prompt, adjusts paths
 - **User config** -- name/email prompted on `chezmoi init`
