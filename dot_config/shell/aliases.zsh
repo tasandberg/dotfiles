@@ -3,7 +3,7 @@
 # Dotfiles management
 alias aliaz="dotfiles edit aliases"
 alias aliazl="dotfiles edit local"
-alias brefresh="dotfiles apply"
+alias brefresh="chezmoi apply && source ~/.zshrc"
 
 # General
 alias p="pnpm"
