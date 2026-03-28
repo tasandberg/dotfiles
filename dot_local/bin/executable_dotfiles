@@ -1,0 +1,185 @@
+#!/usr/bin/env zsh
+
+set -e
+
+SHELL_DIR="$HOME/.config/shell"
+LOCAL_FILE="$HOME/.zshrc.local"
+SECRETS_CACHE="$HOME/.config/secrets/env"
+EDITOR="${EDITOR:-nvim}"
+
+_usage() {
+  cat <<'EOF'
+dotfiles — manage your shell configuration
+
+Usage:
+  dotfiles edit <target>   Edit a config file, then apply + reload
+  dotfiles apply           Apply chezmoi and reload the shell config
+  dotfiles cd              Print the chezmoi source directory
+  dotfiles push [message]  Commit and push chezmoi source to remote
+  dotfiles status          Show chezmoi diff (what would change on apply)
+  dotfiles secrets sync    Fetch secrets from Bitwarden and cache locally
+  dotfiles secrets list    List secrets in Bitwarden (without values)
+  dotfiles secrets set     Create or update a secret (KEY VALUE)
+  dotfiles secrets rm      Delete a secret by key name
+  dotfiles secrets edit    Open the cached secrets file
+
+Targets for 'edit':
+  aliases    Tracked aliases        (~/.config/shell/aliases.zsh)
+  variables  Tracked env/PATH       (~/.config/shell/variables.zsh)
+  prompt     Tracked prompt config  (~/.config/shell/prompt.zsh)
+  local      Local-only overrides   (~/.zshrc.local)
+  zshrc      Main zshrc             (~/.zshrc)
+EOF
+}
+
+_apply() {
+  chezmoi apply
+  echo "Applied. Run 'source ~/.zshrc' or open a new shell to reload."
+}
+
+_edit() {
+  local target="$1"
+  case "$target" in
+    aliases)    chezmoi edit "$SHELL_DIR/aliases.zsh" ;;
+    variables)  chezmoi edit "$SHELL_DIR/variables.zsh" ;;
+    prompt)     chezmoi edit "$SHELL_DIR/prompt.zsh" ;;
+    local)      $EDITOR "$LOCAL_FILE" ;;
+    zshrc)      chezmoi edit "$HOME/.zshrc" ;;
+    *)          echo "Unknown target: $target"; _usage; exit 1 ;;
+  esac
+
+  if [[ "$target" != "local" ]]; then
+    chezmoi apply
+  fi
+  echo "Done. Run 'source ~/.zshrc' or open a new shell to reload."
+}
+
+_push() {
+  local msg="${1:-update dotfiles}"
+  chezmoi git -- add -A
+  chezmoi git -- commit -m "$msg"
+  chezmoi git -- push
+  echo "Pushed."
+}
+
+_status() {
+  chezmoi diff
+}
+
+_bws_token() {
+  security find-generic-password -a "$USER" -s "bws-access-token" -w
+}
+
+_bws_project_id() {
+  local token="$1"
+  bws project list --access-token "$token" 2>/dev/null \
+    | python3 -c "
+import json, sys
+projects = json.load(sys.stdin)
+if projects:
+    print(projects[0]['id'])
+"
+}
+
+_secrets() {
+  local subcmd="${1:-}"
+  case "$subcmd" in
+    sync)
+      local token
+      token="$(_bws_token)"
+      mkdir -p "$(dirname "$SECRETS_CACHE")"
+      bws secret list --access-token "$token" 2>/dev/null \
+        | python3 -c "
+import json, sys
+for s in json.load(sys.stdin):
+    key = s['key']
+    val = s['value'].replace('\"', '\\\\\"')
+    print(f'export {key}=\"{val}\"')
+" > "$SECRETS_CACHE"
+      chmod 600 "$SECRETS_CACHE"
+      local count
+      count=$(wc -l < "$SECRETS_CACHE" | tr -d ' ')
+      echo "Synced $count secret(s) to $SECRETS_CACHE"
+      ;;
+    list)
+      local token
+      token="$(_bws_token)"
+      bws secret list --access-token "$token" 2>/dev/null \
+        | python3 -c "
+import json, sys
+for s in json.load(sys.stdin):
+    print(f\"{s['key']:30s}  {s['id']}\")
+"
+      ;;
+    set)
+      local key="${2:-}" val="${3:-}"
+      if [[ -z "$key" || -z "$val" ]]; then
+        echo "Usage: dotfiles secrets set KEY VALUE"
+        exit 1
+      fi
+      local token
+      token="$(_bws_token)"
+      local project_id
+      project_id="$(_bws_project_id "$token")"
+      # Check if secret already exists
+      local existing_id
+      existing_id=$(bws secret list --access-token "$token" 2>/dev/null \
+        | python3 -c "
+import json, sys
+for s in json.load(sys.stdin):
+    if s['key'] == '$key':
+        print(s['id'])
+        break
+" 2>/dev/null)
+      if [[ -n "$existing_id" ]]; then
+        bws secret edit "$existing_id" --key "$key" --value "$val" --access-token "$token" > /dev/null
+        echo "Updated $key"
+      else
+        bws secret create "$key" "$val" "$project_id" --access-token "$token" > /dev/null
+        echo "Created $key"
+      fi
+      ;;
+    rm)
+      local key="${2:-}"
+      if [[ -z "$key" ]]; then
+        echo "Usage: dotfiles secrets rm KEY"
+        exit 1
+      fi
+      local token
+      token="$(_bws_token)"
+      local secret_id
+      secret_id=$(bws secret list --access-token "$token" 2>/dev/null \
+        | python3 -c "
+import json, sys
+for s in json.load(sys.stdin):
+    if s['key'] == '$key':
+        print(s['id'])
+        break
+")
+      if [[ -z "$secret_id" ]]; then
+        echo "Secret '$key' not found"
+        exit 1
+      fi
+      bws secret delete "$secret_id" --access-token "$token" > /dev/null
+      echo "Deleted $key"
+      ;;
+    edit)
+      $EDITOR "$SECRETS_CACHE"
+      ;;
+    *)
+      echo "Usage: dotfiles secrets [sync|list|set|rm|edit]"
+      exit 1
+      ;;
+  esac
+}
+
+case "${1:-}" in
+  edit)    _edit "${2:-}" ;;
+  apply)   _apply ;;
+  cd)      chezmoi source-path ;;
+  push)    _push "${2:-}" ;;
+  status)  _status ;;
+  secrets) shift; _secrets "$@" ;;
+  help|-h|--help) _usage ;;
+  *)       _usage ;;
+esac

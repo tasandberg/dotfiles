@@ -1,57 +1,19 @@
-# Path to your Oh My Zsh installation.
+# ~/.zshrc — managed by chezmoi
+# Config is split into ~/.config/shell/ for organization.
+
 export ZSH="$HOME/.oh-my-zsh"
 
-# Pure prompt
-ZSH_THEME=""
-fpath+=($HOME/.zsh/pure)
-autoload -U promptinit; promptinit
-prompt pure
-{{ if (env "DEVCONTAINER") -}}
-# Disable git status in prompt — slow on bind-mounted volumes
-zstyle ':prompt:pure:git:stash' show no
-zstyle ':prompt:pure:git:fetch' only-hierarchies yes
-PURE_GIT_PULL=0
-{{ end -}}
+# Load shell config
+source ~/.config/shell/prompt.zsh
+source ~/.config/shell/variables.zsh
 
-# Plugins
+# Oh My Zsh (after prompt + variables are set)
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-# Universal aliases
-alias p="pnpm"
-
-# fzf
+# Aliases + tools
+source ~/.config/shell/aliases.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-{{ if not (env "DEVCONTAINER") -}}
-# --- Host-only tools (skipped in devcontainers) ---
-
-{{ if eq .chezmoi.os "darwin" -}}
-# Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
-
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-
-# rbenv
-eval "$(rbenv init - --no-rehash zsh)"
-
-# pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-{{ end -}}
-{{ end -}}
-
-# Universal PATH
-export PATH="$HOME/.local/bin:$PATH"
-
-# Editor
-export EDITOR="nvim"
-export HISTSIZE=15000
-export HUSKY=0
+# Local overrides (not tracked by chezmoi)
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
